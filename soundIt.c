@@ -159,13 +159,14 @@ int Snd_restore()
 /* volume control not implemented yet.*/
 int Snd_effect( int sound_num, int channel )
 	{
+		[[maybe_unused]] int unused_result;
 	if(! sampleMixerStatus )
 		return EXIT_FAILURE;
 		
 	if(S_sounds[sound_num].data != NULL)
 		{	
-		write(S_fd_pipe[1], &sound_num, sizeof(sound_num));
-		write(S_fd_pipe[1], &channel, sizeof(channel));
+		unused_result = write(S_fd_pipe[1], &sound_num, sizeof(sound_num));
+		unused_result = write(S_fd_pipe[1], &channel, sizeof(channel));
 		}
 	else
 		fprintf(stderr,"Referencing NULL sound entry\n");
@@ -180,6 +181,8 @@ int Snd_init_dev()
 	S_fd_snddev = -1;
 
 	S_son_pid = 0;
+
+	[[maybe_unused]] int unused_result;
 
 
 	if(access(S_snddev,W_OK) != 0)
@@ -278,7 +281,7 @@ int Snd_init_dev()
 				if (read(S_fd_pipe[0], &sound_num, sizeof(int))==0)
 					break;
 
-				read(S_fd_pipe[0], &ch, sizeof(int));
+				unused_result = read(S_fd_pipe[0], &ch, sizeof(int));
 
 				/* printf("chan=%d snd=%d len=%d \n", ch, sound_num, S_sounds[sound_num].len ); */
 				/* Find free channel for sample */
@@ -297,7 +300,7 @@ int Snd_init_dev()
 				}
 			
 			Chan_mixAll(&mix,chan);
-			write(S_fd_snddev, mix.Vclippedbuf, fragsize );
+			unused_result = write(S_fd_snddev, mix.Vclippedbuf, fragsize );
 			}
 
 		Mix_dealloc( &mix );			
@@ -483,6 +486,8 @@ Snd_loadRawSample( const char *file, Sample *sample )
    {
    FILE *fp;
 
+   [[maybe_unused]] int unused_result;
+
    sample->data = NULL;
    sample->len  = 0;
    
@@ -505,7 +510,7 @@ Snd_loadRawSample( const char *file, Sample *sample )
    	return -2;
    	}
    
-   fread( sample->data, 1, sample->len, fp ); 	
+   unused_result = fread( sample->data, 1, sample->len, fp ); 	
   
    fclose(fp);
    
