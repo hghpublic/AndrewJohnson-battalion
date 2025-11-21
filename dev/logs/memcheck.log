@@ -1,0 +1,30 @@
+==46476== Memcheck, a memory error detector
+==46476== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==46476== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==46476== Command: /workspaces/AndrewJohnson-battalion/build/battalion
+==46476== Parent PID: 46475
+==46476== 
+==46476== 
+==46476== HEAP SUMMARY:
+==46476==     in use at exit: 59,231,280 bytes in 34,519 blocks
+==46476==   total heap usage: 210,870 allocs, 176,351 frees, 1,291,242,255 bytes allocated
+==46476== 
+==46476== LEAK SUMMARY:
+==46476==    definitely lost: 0 bytes in 0 blocks
+==46476==    indirectly lost: 0 bytes in 0 blocks
+==46476==      possibly lost: 0 bytes in 0 blocks
+==46476==    still reachable: 0 bytes in 0 blocks
+==46476==         suppressed: 59,231,280 bytes in 34,519 blocks
+==46476== 
+==46476== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 9667 from 1327)
+--46476-- 
+--46476-- used_suppression:   4041 <libgallium-Leak> /workspaces/AndrewJohnson-battalion/battalion.valgrind.supp:2 suppressed: 59,943,413 bytes in 30,962 blocks
+--46476-- used_suppression:     75 <tk-Leak> /workspaces/AndrewJohnson-battalion/battalion.valgrind.supp:43 suppressed: 327,741 bytes in 804 blocks
+--46476-- used_suppression:    171 <dl_-Leak> /workspaces/AndrewJohnson-battalion/battalion.valgrind.supp:37 suppressed: 100,942 bytes in 274 blocks
+--46476-- used_suppression:   2445 <libLLVM-Leak> /workspaces/AndrewJohnson-battalion/battalion.valgrind.supp:31 suppressed: 104,926 bytes in 2,453 blocks
+--46476-- used_suppression:     26 <libGLX_mesa-Leak> /workspaces/AndrewJohnson-battalion/battalion.valgrind.supp:19 suppressed: 721 bytes in 26 blocks
+--46476-- used_suppression:     12 <libLLVM-Cond> /workspaces/AndrewJohnson-battalion/battalion.valgrind.supp:25
+--46476-- used_suppression:   5188 <libgallium-Value8> /workspaces/AndrewJohnson-battalion/battalion.valgrind.supp:14
+--46476-- used_suppression:   3159 <libgallium-Cond> /workspaces/AndrewJohnson-battalion/battalion.valgrind.supp:8
+==46476== 
+==46476== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 9667 from 1327)

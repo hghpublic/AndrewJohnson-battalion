@@ -1,0 +1,70 @@
+
+=================================================================
+==2226==ERROR: AddressSanitizer: heap-use-after-free on address 0x5080000a3fd0 at pc 0xaaaabaa47ad4 bp 0xffffc7a7f4d0 sp 0xffffc7a7f4c0
+READ of size 4 at 0x5080000a3fd0 thread T0
+    #0 0xaaaabaa47ad0 in checkForBlock /workspaces/AndrewJohnson-battalion/battalion.c:464
+    #1 0xaaaabaa4e264 in updateTanks /workspaces/AndrewJohnson-battalion/battalion.c:1282
+    #2 0xaaaabaa635c8 in doUpdate /workspaces/AndrewJohnson-battalion/battalion.c:4169
+    #3 0xaaaabaa6a36c in id /workspaces/AndrewJohnson-battalion/battalion.c:5313
+    #4 0xaaaabaab75a4 in tkExec /workspaces/AndrewJohnson-battalion/tk.c:426
+    #5 0xaaaabaa6bb40 in main /workspaces/AndrewJohnson-battalion/battalion.c:5596
+    #6 0xffff90c484c0 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58
+    #7 0xffff90c48594 in __libc_start_main_impl ../csu/libc-start.c:360
+    #8 0xaaaabaa45cac in _start (/workspaces/AndrewJohnson-battalion/build/battalion+0x15cac) (BuildId: 58d5f1c1cfbd5e146eb8dea20fb955644da3894f)
+
+0x5080000a3fd0 is located 48 bytes inside of 96-byte region [0x5080000a3fa0,0x5080000a4000)
+freed by thread T0 here:
+    #0 0xffff912261b4 in free ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:52
+    #1 0xaaaabaa51a60 in updateTanks /workspaces/AndrewJohnson-battalion/battalion.c:1566
+    #2 0xaaaabaa635c8 in doUpdate /workspaces/AndrewJohnson-battalion/battalion.c:4169
+    #3 0xaaaabaa6a36c in id /workspaces/AndrewJohnson-battalion/battalion.c:5313
+    #4 0xaaaabaab75a4 in tkExec /workspaces/AndrewJohnson-battalion/tk.c:426
+    #5 0xaaaabaa6bb40 in main /workspaces/AndrewJohnson-battalion/battalion.c:5596
+    #6 0xffff90c484c0 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58
+    #7 0xffff90c48594 in __libc_start_main_impl ../csu/libc-start.c:360
+    #8 0xaaaabaa45cac in _start (/workspaces/AndrewJohnson-battalion/build/battalion+0x15cac) (BuildId: 58d5f1c1cfbd5e146eb8dea20fb955644da3894f)
+
+previously allocated by thread T0 here:
+    #0 0xffff912276d0 in malloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0xaaaabaa539b8 in addNewTank /workspaces/AndrewJohnson-battalion/battalion.c:1873
+    #2 0xaaaabaa61ad8 in doUpdate /workspaces/AndrewJohnson-battalion/battalion.c:3958
+    #3 0xaaaabaa6a36c in id /workspaces/AndrewJohnson-battalion/battalion.c:5313
+    #4 0xaaaabaab75a4 in tkExec /workspaces/AndrewJohnson-battalion/tk.c:426
+    #5 0xaaaabaa6bb40 in main /workspaces/AndrewJohnson-battalion/battalion.c:5596
+    #6 0xffff90c484c0 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58
+    #7 0xffff90c48594 in __libc_start_main_impl ../csu/libc-start.c:360
+    #8 0xaaaabaa45cac in _start (/workspaces/AndrewJohnson-battalion/build/battalion+0x15cac) (BuildId: 58d5f1c1cfbd5e146eb8dea20fb955644da3894f)
+
+SUMMARY: AddressSanitizer: heap-use-after-free /workspaces/AndrewJohnson-battalion/battalion.c:464 in checkForBlock
+Shadow bytes around the buggy address:
+  0x5080000a3d00: fa fa fa fa fd fd fd fd fd fd fd fd fd fd fd fa
+  0x5080000a3d80: fa fa fa fa fd fd fd fd fd fd fd fd fd fd fd fd
+  0x5080000a3e00: fa fa fa fa fd fd fd fd fd fd fd fd fd fd fd fa
+  0x5080000a3e80: fa fa fa fa fd fd fd fd fd fd fd fd fd fd fd fa
+  0x5080000a3f00: fa fa fa fa fd fd fd fd fd fd fd fd fd fd fd fd
+=>0x5080000a3f80: fa fa fa fa fd fd fd fd fd fd[fd]fd fd fd fd fd
+  0x5080000a4000: fa fa fa fa fd fd fd fd fd fd fd fd fd fd fd fa
+  0x5080000a4080: fa fa fa fa fd fd fd fd fd fd fd fd fd fd fd fa
+  0x5080000a4100: fa fa fa fa fd fd fd fd fd fd fd fd fd fd fd fa
+  0x5080000a4180: fa fa fa fa fd fd fd fd fd fd fd fd fd fd fd fd
+  0x5080000a4200: fa fa fa fa fd fd fd fd fd fd fd fd fd fd fd fa
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+==2226==ABORTING

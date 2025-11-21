@@ -1,0 +1,129 @@
+= Issues
+
+== cmake
+
+=== valgrind target not working as expected
+
+https://github.com/google/sanitizers/wiki/AddressSanitizer#faq
+
+. Q: I'm using dynamic ASan runtime and my program crashes at start with "Shadow memory range interleaves with an existing memory mapping. ASan cannot proceed correctly.".
+
+.. A1: If you are using shared ASan DSO, try LD_PRELOAD'ing Asan runtime into your program.
+
+.. A2: Otherwise you are probably hitting a known limitation of dynamic runtime. Libasan is initialized at the end of program startup so if some preceeding library initializer did lots of memory allocations memory region required for ASan shadow memory could be occupied by unrelated mappings.
+
+
+
+----
+[build] ==75377==Shadow memory range interleaves with an existing memory mapping. ASan cannot proceed correctly. ABORTING.
+[build] ==75377==ASan shadow was supposed to be located in the [0x000ffffff000-0x0013ffffffff] range.
+[build] ==75377==This might be related to ELF_ET_DYN_BASE change in Linux 4.12.
+[build] ==75377==See https://github.com/google/sanitizers/issues/856 for possible workarounds.
+[build] ==75377==Process memory map follows:
+[build] 	0x000000108000-0x0000002c9000	/workspaces/AndrewJohnson-battalion/build/battalion
+[build] 	0x0000002e4000-0x0000002e8000	/workspaces/AndrewJohnson-battalion/build/battalion
+[build] 	0x0000002e8000-0x00000036e000	/workspaces/AndrewJohnson-battalion/build/battalion
+
+...
+
+         	0x000ffffff000-0x0013ffffffff
+[build] 	0x0010095d4000-0x0010095d5000	/tmp/vgdb-pipe-shared-mem-vgdb-75377-by-vscode-on-879dc90f8729
+         	0x000ffffff000-0x0013ffffffff
+
+...
+
+[build] 	0xffffb8295000-0xffffb8297000	[vvar]
+[build] 	0xfffff7600000-0xfffff7621000	[stack]
+[build] ==75377==End of process memory map.
+----
+
+[source, shell]
+----
+$ sudo find / -type f -name "libasan.so.*"
+find: ‘/proc/401/task/401/net’: Invalid argument
+find: ‘/proc/401/net’: Invalid argument
+/usr/lib/aarch64-linux-gnu/libasan.so.8.0.0
+----
+
+. When `ulimit -s unlimited`, Linux loads libraries into the lower part of the process' address space (instead of the top part); combined with high ASLR entropy, the libraries often overlap with where ASan wants to map its shadow memory.
++
+The workaround is to either set the stack size limit or reduce ASLR entropy. Would MariaDB work with a very large, but finite stack size? (e.g., `ulimit -s 16000000`: ~16GB)
+
+. For anyone encountering this problem: In my case, this error showed up when I ran a C++ program with `-fsanitize` and `valgrind --leak-check=full`. They have to be run separately.
+
+HOWTO: Use ulimit command to set soft limits
+
+https://www.osc.edu/resources/getting_started/howto/howto_use_ulimit_command_to_set_soft_limits
+
+[source, shell]
+----
+$ ulimit -a
+-t: cpu time (seconds)              unlimited
+-f: file size (blocks)              unlimited
+-d: data seg size (kbytes)          unlimited
+-s: stack size (kbytes)             8192
+-c: core file size (blocks)         0
+-m: resident set size (kbytes)      unlimited
+-u: processes                       unlimited
+-n: file descriptors                1048576
+-l: locked-in-memory size (kbytes)  unlimited
+-v: address space (kbytes)          unlimited
+-x: file locks                      unlimited
+-i: pending signals                 31318
+-q: bytes in POSIX msg queues       819200
+-e: max nice                        0
+-r: max rt priority                 0
+-N 15: rt cpu time (microseconds)   unlimited
+----
+
+
+== DynamoRIO overwriting LD_PRELOAD for shared libraries
+
+https://groups.google.com/g/DynamoRIO-Users/c/ldbrgZFBRL0
+
+Derek Bruening
+ungelesen,
+03.06.2022, 07:00:54
+an Mah, DynamoRIO Users
+On Wed, Jun 1, 2022 at 9:04 PM Mah <mahw...@gmail.com> wrote:
+I am using Address Sanitizer runtime library with my dynamorio client. I am loading shared object library libclang_rt.asan-x86_64.so dynamically using LD_PRELOAD. It complains about "Shadow memory range interleaves with an existing memory mapping. ASan cannot proceed correctly. ABORTING."
+
+Asan has giant hardcoded address ranges and will fail like this if it can't get them all to itself.  It would be nice if it would tell you the precise range it needs and what's mapped there now.  Probably it is either DR's vmheap or vmcode.  You can tweak the vmcode base with options like -no_vm_base_near_app -vm_base 0x200000000 or sthg like that and try to move things around the region that asan wants.
+ 
+When I run dyanmorio under debugger and set LD_PRELOAD through set environrment (shown below), it works ok. 
+
+Because the debugger disables ASLR and so changes where DR's allocs end up?
+ 
+Any ideas on how to fix this without debugger?
+
+See above, or if it's ASLR disable that with setarch `uname -m` -R.
+ 
+ It seems like DynamoRIO is somehow overwriting LD_PRELOAD when run without debugger. 
+
+?  I don't follow why any of the described behavior would lead to this conclusion.  DR with default options does nothing with LD_PRELOAD.  If "DynamoRIO is somehow overwriting LD_PRELOAD when run without debugger" then how would you have gotten that message from asan, since asan would not have been loaded?
+ 
+
+$$ gdb DynamoRIO-Linux-8.0.0-1/bin64/drrun
+
+(gdb) set environment LD_PRELOAD /home/user1/llvm-project/build/lib/clang/12.0.1/lib/linux/libclang_rt.asan-x86_64.so
+
+
+== Crashes
+
+----
+
+
+Thread 1 "battalion" received signal SIGABRT, Aborted.
+__pthread_kill_implementation (threadid=281474842214432, signo=signo@entry=6, no_tid=no_tid@entry=0) at ./nptl/pthread_kill.c:44
+Loaded '/lib/aarch64-linux-gnu/libGLX_mesa.so.0'. Symbols loaded.
+
+/workspaces/AndrewJohnson-battalion/tk.c
+
+void tkGetMouseLoc(int *x, int *y)
+...
+    XQueryPointer(display, window, (Window *)&junk, (Window *)&junk,
+		  &junk, &junk, x, y, (unsigned int *)&junk);
+
+Exception has occurred.
+Aborted
+----
