@@ -217,6 +217,7 @@ void updateScores(char * scorefullPath, int monster, int monsterScore, int mode,
     int c;
     int position;
     int current;
+	[[maybe_unused]] int unused_result;
 
     if (mode == DEMOMODE)
 	strcpy(thaName, "demo");
@@ -228,13 +229,13 @@ void updateScores(char * scorefullPath, int monster, int monsterScore, int mode,
     if (hiScoreFile != NULL)
 	{
 	for(c=0;c<3;c++)
-	    fscanf(hiScoreFile, "%d%c%s", &(G[c].number), &garbage, (char*)&(G[c].name));    
+	    unused_result = fscanf(hiScoreFile, "%d%c%s", &(G[c].number), &garbage, (char*)&(G[c].name));    
 	for(c=0;c<3;c++)
-	    fscanf(hiScoreFile, "%d%c%s", &(V[c].number), &garbage, (char*)&(V[c].name));
+	    unused_result = fscanf(hiScoreFile, "%d%c%s", &(V[c].number), &garbage, (char*)&(V[c].name));
 	for(c=0;c<3;c++)
-	    fscanf(hiScoreFile, "%d%c%s", &(F[c].number), &garbage, (char*)&(F[c].name));
+	    unused_result = fscanf(hiScoreFile, "%d%c%s", &(F[c].number), &garbage, (char*)&(F[c].name));
 	for(c=0;c<3;c++)
-	    fscanf(hiScoreFile, "%d%c%s", &(T[c].number), &garbage, (char*)&(T[c].name));
+	    unused_result = fscanf(hiScoreFile, "%d%c%s", &(T[c].number), &garbage, (char*)&(T[c].name));
 	
 	fclose(hiScoreFile);
 	
@@ -2203,6 +2204,8 @@ void setPlayConditions()
 
     struct tree unitHill;
 
+	[[maybe_unused]] int unused_result;
+
     unitHill.type	    = 3;
     unitHill.y		    = PLANEY;
     unitHill.deathCount	    = 0;
@@ -2307,7 +2310,7 @@ void setPlayConditions()
 	    temptree = (struct tree *) amalloc(sizeof(struct tree), arena);
 	    if (temptree != NULL)
 		{
-		fscanf(roadFile,  "%f %f %d %d ", &x, &z, &type, &shape);
+		unused_result = fscanf(roadFile,  "%f %f %d %d ", &x, &z, &type, &shape);
 		
 		temptree->x		    = x;
 		temptree->z		    = z;
@@ -2383,7 +2386,7 @@ void setPlayConditions()
 	else
 	    {
 	    do  {
-		fscanf(roadFile,  "%f %f %d", &x, &z, &type);
+		unused_result = fscanf(roadFile,  "%f %f %d", &x, &z, &type);
 		
 		if (x || z || type)
 		    addNewTank(targets, x, z, type, tanklist, treelist, mainCounter, firingDelay, &Googelon);
@@ -2533,6 +2536,8 @@ void initialization()
     char * playerPointer;
     char scoredataPath[MAXPATH];
     char garbage;
+
+	[[maybe_unused]] int unused_result;
     
     /******************************/
     /* set up sone network stuff  */
@@ -2873,7 +2878,7 @@ void initialization()
 	i = 0;
 	do
 	    {
-	    fscanf(roadFile,  "%f %f %d", &garb1,  &garb2, &garb3);
+	    unused_result = fscanf(roadFile,  "%f %f %d", &garb1,  &garb2, &garb3);
 	    i += 1;
 	    }
 	while (garb1 || garb2 || garb3);
@@ -2891,7 +2896,7 @@ void initialization()
 	    i = i - 2;
 	    for(; i >= 0; i--)
 		{
-		fscanf(roadFile,  "%f %f %d", &garb1,  &garb2, &garb3);
+		unused_result = fscanf(roadFile,  "%f %f %d", &garb1,  &garb2, &garb3);
 		roadSystem[i].x = garb1;
 		roadSystem[i].y = garb2;
 		roadSystem[i].type = (char) garb3;
@@ -2977,21 +2982,21 @@ void initialization()
 	}
     else
 	{	
-	fscanf(hiScoreFile, "%d%c%s", &(G[0].number), &garbage, (char*)&(G[0].name));
-	fscanf(hiScoreFile, "%d%c%s", &(G[1].number), &garbage, (char*)&(G[1].name));
-	fscanf(hiScoreFile, "%d%c%s", &(G[2].number), &garbage, (char*)&(G[2].name));
+	unused_result = fscanf(hiScoreFile, "%d%c%s", &(G[0].number), &garbage, (char*)&(G[0].name));
+	unused_result = fscanf(hiScoreFile, "%d%c%s", &(G[1].number), &garbage, (char*)&(G[1].name));
+	unused_result = fscanf(hiScoreFile, "%d%c%s", &(G[2].number), &garbage, (char*)&(G[2].name));
 
-	fscanf(hiScoreFile, "%d%c%s", &(V[0].number), &garbage, (char*)&(V[0].name));
-	fscanf(hiScoreFile, "%d%c%s", &(V[1].number), &garbage, (char*)&(V[1].name));
-	fscanf(hiScoreFile, "%d%c%s", &(V[2].number), &garbage, (char*)&(V[2].name));
+	unused_result = fscanf(hiScoreFile, "%d%c%s", &(V[0].number), &garbage, (char*)&(V[0].name));
+	unused_result = fscanf(hiScoreFile, "%d%c%s", &(V[1].number), &garbage, (char*)&(V[1].name));
+	unused_result = fscanf(hiScoreFile, "%d%c%s", &(V[2].number), &garbage, (char*)&(V[2].name));
 
-	fscanf(hiScoreFile, "%d%c%s", &(F[0].number), &garbage, (char*)&(F[0].name));
-	fscanf(hiScoreFile, "%d%c%s", &(F[1].number), &garbage, (char*)&(F[1].name));
-	fscanf(hiScoreFile, "%d%c%s", &(F[2].number), &garbage, (char*)&(F[2].name));
+	unused_result = fscanf(hiScoreFile, "%d%c%s", &(F[0].number), &garbage, (char*)&(F[0].name));
+	unused_result = fscanf(hiScoreFile, "%d%c%s", &(F[1].number), &garbage, (char*)&(F[1].name));
+	unused_result = fscanf(hiScoreFile, "%d%c%s", &(F[2].number), &garbage, (char*)&(F[2].name));
 
-	fscanf(hiScoreFile, "%d%c%s", &(T[0].number), &garbage, (char*)&(T[0].name));
-	fscanf(hiScoreFile, "%d%c%s", &(T[1].number), &garbage, (char*)&(T[1].name));
-	fscanf(hiScoreFile, "%d%c%s", &(T[2].number), &garbage, (char*)&(T[2].name));
+	unused_result = fscanf(hiScoreFile, "%d%c%s", &(T[0].number), &garbage, (char*)&(T[0].name));
+	unused_result = fscanf(hiScoreFile, "%d%c%s", &(T[1].number), &garbage, (char*)&(T[1].name));
+	unused_result = fscanf(hiScoreFile, "%d%c%s", &(T[2].number), &garbage, (char*)&(T[2].name));
 
 	fclose(hiScoreFile);
 	}
