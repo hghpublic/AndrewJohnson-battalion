@@ -279,7 +279,7 @@ void showScores(int itsChristmas, struct score* gscore, struct score* vscore,
 		struct monsterInfo monster, int counter,
 		float offsetX, int detail)
     {
-    char textString[256];
+    char textString[256+32];
     struct monsterInfo tempMonster;
     GLfloat lineWidthNow;
 

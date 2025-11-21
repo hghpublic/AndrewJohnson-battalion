@@ -2531,7 +2531,7 @@ void initialization()
     GLint gdtmp;
     GLint tmp[4];
     GLenum type;    
-    char textBuffer[80];
+    char textBuffer[80+512];
     char * dataPtr;
     char * playerPointer;
     char scoredataPath[MAXPATH];
