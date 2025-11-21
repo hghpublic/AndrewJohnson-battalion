@@ -774,7 +774,7 @@ void processNetwork(time_t now, int mainCounter, int totalCounter,
     long recvFrom;
     struct sockaddr_in cli_addr;
     char recvline[MAXLINE];
-    char mesg[MAXLINE];
+    char mesg[MAXLINE+32];
     char command[MAXLINE];
 
     struct targetInfo * tempTarget;
