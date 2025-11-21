@@ -114,7 +114,7 @@ all:	$(TARGET)
 #	$(CC) $(CFLAGS) $(LIBFLAG) $(OS) $(WHICHLIB) $(AUDIOLIB) -c $?
 
 $(TARGET): $(OBJ)
-	$(CC) -o $(TARGET) $(OBJ) $(LIBFLAGS) $(GLIB) $(LIBS) $(AUDIODEF)
+	$(CC) -std=c23 -o $(TARGET) $(OBJ) $(LIBFLAGS) $(GLIB) $(LIBS) $(AUDIODEF)
 
 clean:
 	rm -f $(OBJ)
