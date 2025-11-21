@@ -378,7 +378,9 @@ void tellAboutAllTanks(struct sockaddr_in * cli, int length
 
 /* nother copy of this elsewhere */
 
-	sprintf(mesg, "%s %d %3.1f %3.1f %3.1f %3.1f %0.3f %d %d #", MESG_NEW_TANK,
+// FIXME: erroneous format specifier %3.1f or %0.3f
+	// sprintf(mesg, "%s %d %3.1f %3.1f %3.1f %3.1f %0.3f %d %d #", MESG_NEW_TANK,
+	sprintf(mesg, "%s %d %3.1f %3.1f %3.1f %0.3f %d %d #", MESG_NEW_TANK,
 						 tempTank->number, 
 						 tempTank->x-globalxshift, 
 						 tempTank->z-globalzshift, 
@@ -387,7 +389,7 @@ void tellAboutAllTanks(struct sockaddr_in * cli, int length
 						 tempTank->type, 
 						 tempTank->maserCount
 						 );
-
+						 printf("%s\n", mesg);
 	sendMessage(mesg, cli, length);
 	}
     }
