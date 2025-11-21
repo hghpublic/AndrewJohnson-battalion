@@ -1,0 +1,10 @@
+# make
+*.o
+battalion
+
+# cmake
+build/
+
+# battalion
+battalion.data/
+battalion_hiscore
