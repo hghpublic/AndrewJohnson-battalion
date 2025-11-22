@@ -108,6 +108,25 @@ void killSounds( void )
 
 #endif
 
+#ifdef SUNAUDIO
+
+void killSounds( void )
+{
+    register int i;
+    
+    /* Free all allocated audio buffers */
+    for (i=0; i<MAXSOUNDS; i++)
+    {
+        if (audio_buffer[i] != NULL)
+        {
+            free(audio_buffer[i]);
+            audio_buffer[i] = NULL;
+        }
+    }
+}
+
+#endif
+
 #ifdef LINUXAUDIO
 
 void killSounds( void )
