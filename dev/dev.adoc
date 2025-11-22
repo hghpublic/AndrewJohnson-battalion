@@ -1,0 +1,42 @@
+= dev
+
+[source, shell]
+----
+valgrind --leak-check=no --track-origins=yes ./build/battalion 2>&1 | head -50
+cd /workspaces/AndrewJohnson-battalion/build && timeout 3 valgrind --leak-check=no --track-origins=yes ./battalion 2>&1 | head -100 || true
+
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=valgrind_output.txt ./build/battalion 2>&1 &
+
+BATTALIONSCOREDIR=./build/battalion/battalion.data;valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=valgrind_output.txt ./build/battalion 2>&1 &
+
+
+vscode ➜ /workspaces/AndrewJohnson-battalion (battalion1.4b/dev/0) $ BATTALIONSCOREDIR=./build/battalion/battalion.data;valgrind --leak-check=full --show-lea
+k-kinds=all --track-origins=yes --log-file=valgrind_output.txt ./build/battalion 2>&1 &
+[1] 2336
+vscode ➜ /workspaces/AndrewJohnson-battalion (battalion1.4b/dev/0) $ ==2336==ASan runtime does not come first in initial library list; you should either link runtime to your application or manually preload it with LD_PRELOAD.
+
+[1]  + 2336 exit 1     valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes   2>&1
+vscode ➜ /workspaces/AndrewJohnson-battalion (battalion1.4b/dev/0) $ 
+
+
+/usr/bin/dot -Tpng battalion_callgraph.dot -o battalion_callgraph.png && ls -lh battalion_callgraph.png
+
+dot -Tpng battalion_callgraph.dot -o battalion_callgraph.png
+dot -Tsvg battalion_callgraph.dot -o battalion_callgraph.svg
+
+&& ls -lh battalion_callgraph.*
+
+echo $DISPLAY
+----
+
+== X connection broken
+
+https://access.redhat.com/solutions/229933
+
+[source, shell]
+----
+X connection to :1 broken (explicit kill or server shutdown).
+
+$ echo $DISPLAY
+:1
+----
