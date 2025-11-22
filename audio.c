@@ -1356,6 +1356,8 @@ void InitAudio(char * fileName,  char * dataPath, int sCounter)
     if ((count = read(audiofd, audio_buffer[sCounter],
 			  file_hdr.data_size)) < 0) {
 	fprintf(stderr, "audio_load: error reading\n");
+	free(audio_buffer[sCounter]);
+	audio_buffer[sCounter] = NULL;
 	close(audiofd);
 	return;
     }
