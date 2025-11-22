@@ -87,6 +87,7 @@ SndChannelPtr musicChan, monsterbeamChan, maserbeamChan;
 void killSounds( void )
 {
     register int i;
+    struct sound *s, *t;
     
     /* Free all allocated sample buffers */
     for (i=0; i<MAXSOUNDS; i++)
@@ -98,10 +99,21 @@ void killSounds( void )
         }
     }
     
-    /* Free the initial allSounds node if allocated */
+    /* Free the entire linked list of sounds */
     if (allSounds != NULL)
     {
-        free(allSounds);
+        s = allSounds;
+        while (s != NULL)
+        {
+            t = s->next;
+            /* Close audio port if it's open before freeing */
+            if (s->audio_port != 0)
+            {
+                ALcloseport(s->audio_port);
+            }
+            free(s);
+            s = t;
+        }
         allSounds = NULL;
     }
 }
