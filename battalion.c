@@ -1266,6 +1266,12 @@ void updateTanks(struct tank * allTanks, float width, float height,
     struct targetInfo * targetinfs[MAXTARGETS+1];
 
     /****************************************/
+    /* rebuild tank array to prevent use-after-free in checkForBlock() */
+    /****************************************/
+    
+    quickTanks();
+
+    /****************************************/
     /* move targets into quick access array */
     /****************************************/
 
