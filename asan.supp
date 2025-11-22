@@ -1,0 +1,17 @@
+# AddressSanitizer Leak Suppression File
+# Suppress indirect leaks from external graphics libraries
+
+# Mesa/Gallium OpenGL driver leaks
+leak:libgallium-25.0.7-0ubuntu0.24.04.2.so
+leak:libGLX_mesa.so.0
+
+# GLU library leaks
+leak:libGLU.so.1
+
+# Generic patterns (if library versions change)
+leak:libgallium*.so
+leak:libGLU.so*
+
+# Optional: suppress all indirect leaks from system libraries
+# leak:/lib/
+# leak:/usr/lib/
