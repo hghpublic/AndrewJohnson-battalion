@@ -317,7 +317,8 @@ int Snd_init_dev()
 			unused_result = write(S_fd_snddev, mix.Vclippedbuf, fragsize );
 			}
 
-		Mix_dealloc( &mix );			
+		Mix_dealloc( &mix );
+		free(chan);			
 		printf("Sound process exiting..\n");
 		close(S_fd_pipe[0]);
 		close(S_fd_pipe[1]);
