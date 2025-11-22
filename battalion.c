@@ -396,6 +396,9 @@ void quickTanks()
     /* copy all vehicles everywhere into quick-access array   */
     /**********************************************************/
   
+    /* Clear array to prevent use-after-free with stale pointers */
+    memset(allTanks2OnPlane, 0, sizeof(allTanks2OnPlane));
+    
     numTanksOnPlane = 0;
     for(temptank = tanklist->next;(temptank != NULL);temptank = temptank->next)
 	{
@@ -461,18 +464,23 @@ int checkForBlock(struct tank * ttank, float rad, float theta, float y)
     while ((tankCounter < numTanksOnPlane) && (!blocked))
 	{
 	ttank2 = allTanks2OnPlane[tankCounter];
-	rad2 = ttank2->rad;
 	
-	if ((ttank->goforit == ttank2->goforit) &&
-	    (tankInRad >= rad2)  &&	     /* check radius */
-	    (tankOutRad <= rad2) &&
-	    (ttank2 != ttank)    &&		    /* not same tank */
-	    (fabs(theta - ttank2->theta) < 0.22) &&   /* check angle */
-	    (fabs(ttank2->y - y) <= 0.6)	    /* check altitude */
-	    )
-		blocked = 1;
+        /* skip NULL pointers to prevent use-after-free */
+        if (ttank2 != NULL)
+        {
+            rad2 = ttank2->rad;
+            
+            if ((ttank->goforit == ttank2->goforit) &&
+                (tankInRad >= rad2)  &&	     /* check radius */
+                (tankOutRad <= rad2) &&
+                (ttank2 != ttank)    &&		    /* not same tank */
+                (fabs(theta - ttank2->theta) < 0.22) &&   /* check angle */
+                (fabs(ttank2->y - y) <= 0.6)	    /* check altitude */
+                )
+                blocked = 1;
+        }
 
-	tankCounter += 1;
+    tankCounter += 1;
 	}
 
     /**********************************************************/
@@ -1560,19 +1568,24 @@ void updateTanks(struct tank * allTanks, float width, float height,
 		killertank->next = slag->next;
 		slag->next = killertank;
 		killertank->count = 1;
+		/* rebuild array immediately to prevent use-after-free in checkForBlock() */
+        quickTanks();
 		}
 	    else
 		{
-		afree(killertank, arena); 
-
-		} 
+		afree(killertank, arena);
+        /* rebuild array immediately to prevent use-after-free in checkForBlock() */
+		quickTanks();
 	    }
-	else 
+        }
+	else
 	    if (ttank->rad > 20 * PLANESIZE)
 		{
 		killertank = temptank->next;
 		temptank->next = temptank->next->next;
-		afree(killertank, arena);  
+		afree(killertank, arena);
+        /* rebuild array immediately to prevent use-after-free in checkForBlock() */
+		quickTanks();
 
 		}
 	    else
@@ -1733,6 +1746,8 @@ void updateSlagTanks(struct tank * allSlags)
 	    killertank = temptank->next;
 	    temptank->next = temptank->next->next;
 	    afree(killertank, arena);
+        /* rebuild array immediately to prevent use-after-free in checkForBlock() */
+	    quickTanks();
 	    }
 	else
 	    temptank = temptank->next;
@@ -2290,6 +2305,9 @@ void setPlayConditions()
 
     targets = (struct targetInfo *) amalloc(sizeof(struct targetInfo), arena);
     targets->next = NULL;
+
+    /* Clear the quick-access array to prevent use-after-free when addNewTank calls checkForBlock */
+    quickTanks();
 
     /************************************************************/
     /* read in data file of structures (trees, buildings, etc.) */
@@ -3957,6 +3975,8 @@ void doUpdate()
 	if (((mainCounter % arrivalTime) == 0) && !Googelon.monsterIsDead)
 	    {
 	    addNewTank(targets, 0, 0, -1, tanklist, treelist, mainCounter, firingDelay, &Googelon);
+        /* rebuild array immediately after adding tank to prevent use-after-free in checkForBlock() */
+	    quickTanks();  
 	    
 	    if ((mode == DEMOMODE) && !(rand() % 4) && (Googelon.moveCount >= 150))
 		view = (view + 1) % 3;
@@ -4167,9 +4187,14 @@ void doUpdate()
     /************************/
 
      if (tanklist->next != NULL)
+	{
+	// quickTanks();
 	updateTanks(tanklist, Googelon.width, Googelon.height, Googelon.bottom,
 	    Googelon.monsterIsDead, Googelon.monster, slaglist, accuracy,
 	    firingDelay, mainCounter, &Googelon, targets);
+	/* rebuild array after any tank deletions to prevent use-after-free */
+    // quickTanks();
+	}
 
 
     /****************************/
