@@ -5,7 +5,7 @@
     },
     "cmake.environment": {
         "BATTALIONSCOREDIR": "${workspaceFolder}/build",
-        "LSAN_OPTIONS": "suppressions=${workspaceFolder}/asan.supp:print_suppressions=1"
+        "LSAN_OPTIONS": "suppressions=${workspaceFolder}/battalion.supp:print_suppressions=1"
     },
     "files.insertFinalNewline": true,
     "editor.detectIndentation": false,
