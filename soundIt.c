@@ -525,7 +525,16 @@ Snd_loadRawSample( const char *file, Sample *sample )
    	return -2;
    	}
    
-   unused_result = fread( sample->data, 1, sample->len, fp ); 	
+   unused_result = fread( sample->data, 1, sample->len, fp );
+   
+   if (unused_result != sample->len)
+   	{
+   	free(sample->data);
+   	sample->data = NULL;
+   	sample->len = 0;
+   	fclose(fp);
+   	return -3;
+   	}
   
    fclose(fp);
    
