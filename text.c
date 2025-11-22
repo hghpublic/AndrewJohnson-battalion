@@ -86,7 +86,7 @@ void initFonts(void)
     if (tkCreateStrokeFont(strokeBase) == GL_FALSE)
 	{
 	showError("Can't create font");
-	exit(1);
+	return;
 	}
     }
 
