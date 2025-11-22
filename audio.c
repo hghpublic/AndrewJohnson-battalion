@@ -82,6 +82,32 @@ SndChannelPtr musicChan, monsterbeamChan, maserbeamChan;
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /* small sound routines to avoid having to use external variables*/
 
+#ifdef SGIAUDIO
+
+void killSounds( void )
+{
+    register int i;
+    
+    /* Free all allocated sample buffers */
+    for (i=0; i<MAXSOUNDS; i++)
+    {
+        if (oneSound[i].sampleBuffer != NULL)
+        {
+            free(oneSound[i].sampleBuffer);
+            oneSound[i].sampleBuffer = NULL;
+        }
+    }
+    
+    /* Free the initial allSounds node if allocated */
+    if (allSounds != NULL)
+    {
+        free(allSounds);
+        allSounds = NULL;
+    }
+}
+
+#endif
+
 #ifdef LINUXAUDIO
 
 void killSounds( void )

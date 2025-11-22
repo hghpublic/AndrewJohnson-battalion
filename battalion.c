@@ -3421,6 +3421,7 @@ GLenum processKey(int key, GLenum mask)
 	case TK_ESCAPE:	    goto1d();
 			    if (pointerGrab)
 				unGrabPointer();
+			    killSounds();
 			    exit(0); 
 	}
 
