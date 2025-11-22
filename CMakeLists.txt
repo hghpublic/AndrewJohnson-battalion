@@ -42,7 +42,7 @@ if(BUILD_WITH_SANITIZERS)
     target_link_options(${target} PRIVATE -fsanitize=address)
     
     # Set ASAN suppression file environment variable
-    set(ASAN_SUPPRESSION_FILE "${CMAKE_SOURCE_DIR}/asan.supp")
+    set(ASAN_SUPPRESSION_FILE "${CMAKE_SOURCE_DIR}/battalion.supp")
     set_target_properties(${target} PROPERTIES
         VS_DEBUGGER_ENVIRONMENT "LSAN_OPTIONS=suppressions=${ASAN_SUPPRESSION_FILE}:print_suppressions=1"
     )
