@@ -1336,6 +1336,7 @@ void InitAudio(char * fileName,  char * dataPath, int sCounter)
     if (error != AUDIO_SUCCESS) {
 	fprintf(stderr, "audio_load: %s is not a valid audio file\n",
 		audioFile);
+	close(audiofd);
 	exit(-1);
     }
 
@@ -1346,10 +1347,17 @@ void InitAudio(char * fileName,  char * dataPath, int sCounter)
 
     audio_buffer[sCounter] = (char *)malloc(file_hdr.data_size);
 
+    if (audio_buffer[sCounter] == NULL) {
+	fprintf(stderr, "audio_load: memory allocation failed\n");
+	close(audiofd);
+	exit(-1);
+    }
+
     if ((count = read(audiofd, audio_buffer[sCounter],
 			  file_hdr.data_size)) < 0) {
 	fprintf(stderr, "audio_load: error reading\n");
 	close(audiofd);
+	return;
     }
 
     buffer_counter[sCounter] = count;
