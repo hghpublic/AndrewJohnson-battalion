@@ -558,6 +558,7 @@ int getMusicOn();
 
 void checkSound(char *);
 void initSounds(void);
+void killSounds(void);
 void flushSounds(void);
 void soundKiller(int);
 void doSound(int);

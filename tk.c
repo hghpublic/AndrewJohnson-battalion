@@ -1088,7 +1088,7 @@ void tkSetGreyRamp(void)
 /*
 void tkQuit(void)
 {
-
+    killSounds();
     exit(0);
 }
 */
