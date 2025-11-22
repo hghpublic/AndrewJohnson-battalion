@@ -1,0 +1,94 @@
+digraph battalion_callgraph {
+  rankdir=TB;
+  node [shape=box, style="rounded,filled", fillcolor=lightblue, fontname="Arial"];
+  edge [color=gray40, arrowsize=0.7];
+  graph [splines=ortho, nodesep=0.5, ranksep=0.8];
+  
+  // Main entry point
+  node [fillcolor=lightgreen];
+  "main";
+  
+  // Core update functions
+  node [fillcolor=lightyellow];
+  "doUpdate" "doDisplay" "id" "initialization";
+  
+  // Input handling
+  node [fillcolor=lightpink];
+  "checkInput" "processKey" "demoKeys" "playKeys" "playNoPauseKeys" "checkMouse";
+  
+  // Rendering functions
+  node [fillcolor=lightcyan];
+  "doDrawing" "goToMonsterView" "goToArmyView" "goToMapView" "goToOverView";
+  "goto3d" "goto1d";
+  
+  // Game logic functions
+  node [fillcolor=wheat];
+  "updateProjectiles" "updateTargets" "updateBooms" "updateSlagTanks" "updatetrees";
+  "updateDeadMonster" "updateVapourLook";
+  
+  // Other functions
+  node [fillcolor=lightgray];
+  "cleanup" "setPlayConditions" "addRandomTarget" "addBoom" "addScore";
+  "checkForBlock" "quickTanks" "updateScores" "buildHillPart";
+  "goToHighDetail" "goToLowDetail" "showCommands" "signal_handler" "autopilot";
+
+  "addRandomTarget" -> "addProjectile";
+  "checkInput" -> "goto1d";
+  "checkInput" -> "goto3d";
+  "demoKeys" -> "setPlayConditions";
+  "doDisplay" -> "doDrawing";
+  "doDrawing" -> "drawAMonster";
+  "doDrawing" -> "goToArmyView";
+  "doDrawing" -> "goToMapView";
+  "doDrawing" -> "goToMonsterView";
+  "doDrawing" -> "goToOverView";
+  "doUpdate" -> "addNewTank";
+  "doUpdate" -> "addProjectile";
+  "doUpdate" -> "addRandomTarget";
+  "doUpdate" -> "checkForBlock";
+  "doUpdate" -> "quickTanks";
+  "doUpdate" -> "setPlayConditions";
+  "doUpdate" -> "updateBooms";
+  "doUpdate" -> "updateDeadMonster";
+  "doUpdate" -> "updateProjectiles";
+  "doUpdate" -> "updateScores";
+  "doUpdate" -> "updateSlagTanks";
+  "doUpdate" -> "updateTanks";
+  "doUpdate" -> "updateTargets";
+  "doUpdate" -> "updateVapourLook";
+  "doUpdate" -> "updatetrees";
+  "goto1d" -> "setmonitor";
+  "id" -> "autopilot";
+  "id" -> "checkMouse";
+  "id" -> "doDisplay";
+  "id" -> "doUpdate";
+  "initialization" -> "cleanup";
+  "initialization" -> "goToHighDetail";
+  "main" -> "cleanup";
+  "main" -> "initialization";
+  "main" -> "setPlayConditions";
+  "main" -> "showCommands";
+  "processKey" -> "cleanup";
+  "processKey" -> "demoKeys";
+  "processKey" -> "goToHighDetail";
+  "processKey" -> "goToLowDetail";
+  "processKey" -> "goto1d";
+  "processKey" -> "playKeys";
+  "processKey" -> "playNoPauseKeys";
+  "setPlayConditions" -> "addNewTank";
+  "setPlayConditions" -> "buildHillPart";
+  "setPlayConditions" -> "quickTanks";
+  "showCommands" -> "cleanup";
+  "signal_handler" -> "cleanup";
+  "updateBooms" -> "addScore";
+  "updateDeadMonster" -> "addProjectile";
+  "updateProjectiles" -> "addBoom";
+  "updateProjectiles" -> "addScore";
+  "updateSlagTanks" -> "addBoom";
+  "updateSlagTanks" -> "addProjectile";
+  "updateSlagTanks" -> "checkForBlock";
+  "updateSlagTanks" -> "quickTanks";
+  "updateTargets" -> "updateDeadMonster";
+  "updateTargets" -> "updateVapourLook";
+  "updatetrees" -> "addProjectile";
+}
