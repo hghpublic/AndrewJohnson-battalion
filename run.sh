@@ -17,4 +17,8 @@ make
 
 BATTALIONSCOREDIR="$(dirname "$0")"
 export BATTALIONSCOREDIR
+
+# Set AddressSanitizer suppression file
+export LSAN_OPTIONS="suppressions=$(pwd)/asan.supp:print_suppressions=1"
+
 ./battalion
