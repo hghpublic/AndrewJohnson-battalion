@@ -411,8 +411,25 @@ void initSounds()
 #ifdef SGIAUDIO
 
     register int i;
+    struct sound *s, *t;
     
-    allSounds = NULL;
+    /* Free existing allSounds list if it exists to prevent memory leak */
+    if (allSounds != NULL)
+    {
+        s = allSounds;
+        while (s != NULL)
+        {
+            t = s->next;
+            /* Close audio port if it's open before freeing */
+            if (s->audio_port != 0)
+            {
+                ALcloseport(s->audio_port);
+            }
+            free(s);
+            s = t;
+        }
+    }
+    
     allSounds = (struct sound *) calloc(1, sizeof(struct sound));
     allSounds->next = NULL;
 
