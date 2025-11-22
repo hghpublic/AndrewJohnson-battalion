@@ -137,6 +137,7 @@ int Snd_init( int num_snd, const Sample *sa, int frequency,
 int Snd_restore()
 	{
 	int result;
+	int i;
 
 	if (!sampleMixerStatus)
 		return EXIT_FAILURE;
@@ -150,6 +151,19 @@ int Snd_restore()
 	else
 		{
 		sampleMixerStatus=0;
+		}
+
+	/* Free all sample data that was loaded */
+	if (S_sounds != NULL)
+		{
+		for (i=0; i<S_num_sounds; i++)
+			{
+			if (S_sounds[i].data != NULL)
+				{
+				free(S_sounds[i].data);
+				/* Note: We can't set to NULL since S_sounds is const */
+				}
+			}
 		}
 
 	return result;
