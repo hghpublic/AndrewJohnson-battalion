@@ -191,6 +191,118 @@ int client;
 
 int biggestTankNumberSent;
 
+static int cleanup_called = 0;  /* Flag to prevent multiple cleanup calls */
+
+/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+/* cleanup allocated memory before exit                          */
+/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+void cleanup()
+    {
+    struct projectile *temp, *killer;
+    struct boom *tempboom, *tempboom2;
+    struct tank *temptank, *ttank;
+    struct tree *temptree, *ttree;
+    struct targetInfo *temptarg, *ttarget;
+    
+    /* Prevent multiple cleanup calls */
+    if (cleanup_called)
+        return;
+    cleanup_called = 1;
+    
+    killSounds();
+    
+    /* Free all linked lists */
+    temp = projectFlight;
+    while (temp != NULL)
+        {
+        killer = temp;
+        temp = temp->next;
+        afree(killer, arena);
+        }
+    projectFlight = NULL;
+    
+    tempboom = projectboom;
+    while (tempboom != NULL)
+        {
+        tempboom2 = tempboom;
+        tempboom = tempboom->next;
+        afree(tempboom2, arena);
+        }
+    projectboom = NULL;
+    
+    temptank = tanklist;
+    while(temptank != NULL)
+        {
+        ttank = temptank;
+        temptank = temptank->next;
+        afree(ttank, arena);
+        }
+    tanklist = NULL;
+    
+    temptank = slaglist;
+    while(temptank != NULL)
+        {
+        ttank = temptank;
+        temptank = temptank->next;
+        afree(ttank, arena);
+        }
+    slaglist = NULL;
+    
+    temptree = treelist;
+    while(temptree != NULL)
+        {
+        ttree = temptree;
+        temptree = temptree->next;
+        afree(ttree, arena);
+        }
+    treelist = NULL;
+    
+    temptarg = targets;
+    while(temptarg != NULL)
+        {
+        ttarget = temptarg;
+        temptarg = temptarg->next;
+        afree(ttarget, arena);
+        }
+    targets = NULL;
+    
+    /* Free roadSystem if allocated */
+    if (roadSystem != NULL)
+        {
+        afree(roadSystem, arena);
+        roadSystem = NULL;
+        }
+    
+    /* Delete arena before freeing sharedmem */
+#ifdef SGIVERSION
+    if (arena != NULL)
+        {
+        adelete(arena);
+        arena = NULL;
+        }
+#endif
+    
+    if (sharedmem != NULL)
+        {
+        free(sharedmem);
+        sharedmem = NULL;
+        }
+    }
+
+/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+/* signal handler for abnormal termination                       */
+/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+
+void signal_handler(int sig)
+    {
+    fprintf(stderr, "\nReceived signal %d, cleaning up...\n", sig);
+    cleanup();
+    signal(sig, SIG_DFL);  /* Reset to default handler */
+    raise(sig);            /* Re-raise signal for proper exit */
+    }
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
@@ -2624,6 +2736,7 @@ void initialization()
     if (tkInitWindow("battalion") == GL_FALSE)
 	{
 	fprintf(stderr, "could not open a window\n");
+	cleanup();
 	exit(1);
 	}
 
@@ -3439,7 +3552,7 @@ GLenum processKey(int key, GLenum mask)
 	case TK_ESCAPE:	    goto1d();
 			    if (pointerGrab)
 				unGrabPointer();
-			    killSounds();
+			    cleanup();
 			    exit(0); 
 	}
 
@@ -5491,6 +5604,7 @@ void showCommands(char * progName)
     fprintf (stderr, "  -n)etwork      declare yourself as a server in a net game\n");
     fprintf (stderr, "  -p)ort #       declare the port # being used in a net game\n");
 
+    cleanup();
     exit(1);
     }
   
@@ -5513,6 +5627,13 @@ int main (int argc, char*argv[])
 #endif
 
     frames = 0;
+    
+    /* Register cleanup handlers for abnormal exit */
+    atexit(cleanup);
+    signal(SIGINT, signal_handler);   /* Ctrl+C */
+    signal(SIGTERM, signal_handler);  /* Termination request */
+    signal(SIGSEGV, signal_handler);  /* Segmentation fault */
+    signal(SIGABRT, signal_handler);  /* Abort */
     
     initialization();
     
@@ -5606,6 +5727,7 @@ int main (int argc, char*argv[])
     if ((netUp == 1) && (client == 1))
 	{
 	showError("must be either a host or a client, not both");
+	cleanup();
 	exit(1);
 	}
     
@@ -5621,6 +5743,7 @@ int main (int argc, char*argv[])
 
     tkExec();
 
-return 0;
+    cleanup();
+    return 0;
 
 }
