@@ -1835,7 +1835,7 @@ void drawBuilding37(float * color, int detail)
     glPushMatrix();
     glColor4fv(colorwhite);
 
-    if ((detail >= 2) && (officeLogoData != NULL))
+    if (detail >= 2)
 	{	
 	glCallList(officeLogo);
 	glEnable(GL_TEXTURE_2D);
@@ -1848,7 +1848,7 @@ void drawBuilding37(float * color, int detail)
 
     glBegin(GL_QUADS);
 
-    if ((detail >= 2) && (picleft != NULL))
+    if (detail >= 2)
 	{	
 	glTexCoord2fv(tv1);
 	glVertex3fv(vec1);
@@ -2027,7 +2027,7 @@ void drawBuilding26(int rorl, int detail)
     /* back of the screen */    
     makercubenobtm( 0, 0.42, 0.28, 0.4,0.42, 0.01, colorwhite);
 
-    if ((detail >= 2) &&  (picleft != NULL) && (picright != NULL))
+    if (detail >= 2)
 	{	
 	glPushMatrix();
 	    glColor4fv(colorwhite);
