@@ -3738,9 +3738,9 @@ void updateTargets()
 	thaMonster.beamOn		= temptarget->net_beamOn;
 
 	nearAngle = temptarget->net_headHorzRotate;
-	if (fabs(thaMonster.headHorzRotate - (temptarget->net_headHorzRotate + 3600)) < fabs(thaMonster.headHorzRotate - nearAngle))
+	if (abs(thaMonster.headHorzRotate - (temptarget->net_headHorzRotate + 3600)) < abs(thaMonster.headHorzRotate - nearAngle))
 	    nearAngle = temptarget->net_headHorzRotate + 3600;
-	if (fabs(thaMonster.headHorzRotate - (temptarget->net_headHorzRotate - 3600)) < fabs(thaMonster.headHorzRotate - nearAngle))
+	if (abs(thaMonster.headHorzRotate - (temptarget->net_headHorzRotate - 3600)) < abs(thaMonster.headHorzRotate - nearAngle))
 	    nearAngle = temptarget->net_headHorzRotate - 3600;
 
 	thaMonster.headHorzRotate	= 0.7 * thaMonster.headHorzRotate + 0.3 * nearAngle;
@@ -5191,20 +5191,20 @@ struct monsterInfo autopilot(float centerX, float centerZ, struct monsterInfo th
     thaMonster.headHorzRotate += speed;
     offsetX = 0.8*offsetX - 0.2*(speed * 0.05); /* used to bank flutter in demo mode*/
 
-    if ((thaMonster.energyRemaining > 15) && (fabs(speed) < 6) && (r < 3.5))
+    if ((thaMonster.energyRemaining > 15) && (abs(speed) < 6) && (r < 3.5))
 	thaMonster.beamOn = 1;
 
     switch(thaMonster.monster){
 	case GOOGELON:
 	case TECHS:		
 	    if ((thaMonster.energyRemaining > 5) && (t != -1)  && (t != HERO) &&
-		(t != MECHAG) && ((fabs(speed) < 3) || (r < 1)))
+		(t != MECHAG) && ((abs(speed) < 3) || (r < 1)))
 		thaMonster.monsterGo = 1;
 
-	    else if (((t == MECHAG)  || (t == HERO)) && (fabs(speed) < 5) && (r > 3))
+	    else if (((t == MECHAG)  || (t == HERO)) && (abs(speed) < 5) && (r > 3))
 		thaMonster.monsterGo = 1;
 
-	    else if (((t == MECHAG)  || (t == HERO)) && (fabs(speed) < 5) && (r < .75))
+	    else if (((t == MECHAG)  || (t == HERO)) && (abs(speed) < 5) && (r < .75))
 		thaMonster.monsterBack = 1;
 	    break;
 	    
@@ -5212,19 +5212,19 @@ struct monsterInfo autopilot(float centerX, float centerZ, struct monsterInfo th
 	    if (((t == MECHAG) || (t == CHH) || (t == HERO)) && (r < 0.2))
 		/*stay put on top of the enemy*/;
 		
-	    else if ((thaMonster.energyRemaining > 5) && ((fabs(speed) < 10) || (r < 4)))
+	    else if ((thaMonster.energyRemaining > 5) && ((abs(speed) < 10) || (r < 4)))
 		thaMonster.monsterGo = 1;
 	    break;
 			
 	case FLUTTER:
 	    if ((thaMonster.energyRemaining > 5) && (t != -1)  && (t != HERO) &&
-		(t != MECHAG) && ((fabs(speed) < 3) || (r < 1)))
+		(t != MECHAG) && ((abs(speed) < 3) || (r < 1)))
 		thaMonster.monsterGo = 1;
-	    else if (((t == MECHAG) || (t == HERO)) && (fabs(speed) < 5) && (r > 3))
+	    else if (((t == MECHAG) || (t == HERO)) && (abs(speed) < 5) && (r > 3))
 		thaMonster.monsterGo = 1;
-	    else if (((t == MECHAG) || (t == HERO)) && (fabs(speed) < 5) && (r < .75))
+	    else if (((t == MECHAG) || (t == HERO)) && (abs(speed) < 5) && (r < .75))
 		thaMonster.monsterBack = 1;
-	    else if (!(((t == MECHAG) || (t == HERO)) && (fabs(speed) < 5) && (r < 1)))
+	    else if (!(((t == MECHAG) || (t == HERO)) && (abs(speed) < 5) && (r < 1)))
 		thaMonster.monsterGo = 1;
 	    break;
     }
