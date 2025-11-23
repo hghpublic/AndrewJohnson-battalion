@@ -1413,7 +1413,7 @@ void updateTanks(struct tank * allTanks, float width, float height,
 	/* mechaGoogelon firing           */
 	/**********************************/
 
-	if ((tanktype == MECHAG))
+	if (tanktype == MECHAG)
 	    {
 	    if ((ttank->count <= 0) && ((rand() % 5) == 0) && (nearestMonster->monsterIsDead != 1))
 		{	    	    
@@ -1445,7 +1445,7 @@ void updateTanks(struct tank * allTanks, float width, float height,
 	/* 009 CHH firing                 */
 	/**********************************/
 
-	if ((tanktype == CHH))
+	if (tanktype == CHH)
 	    {
 	    if ((ttank->count <= 0) && ((rand() % 5) == 0))
 		{
@@ -1557,7 +1557,7 @@ void updateTanks(struct tank * allTanks, float width, float height,
 	/* hero firing maser / shells     */
 	/**********************************/
 
-	if ( (tanktype == HERO))
+	if (tanktype == HERO)
 	    {
 	    if ((ttank->count <= 0) && (ttank->maserCount <= 0) && ((rand() % 5) == 0))
 		{
@@ -2222,14 +2222,14 @@ void updateBooms(struct boom * allBooms, struct tank * tanklist)
 	/* make some noise     */
 	/***********************/
 
-	if ((bboom->count == 2))
+	if (bboom->count == 2)
 	    doSound(EXPLOSION);
 
 	/**********************************/
 	/* check for another tank hit     */
 	/**********************************/
 
-	if ((bboom->count == 4))
+	if (bboom->count == 4)
 	    {	 
 	    for(temptank = tanklist; temptank->next != NULL; temptank = temptank->next)
 		if (tankHit(temptank->next, bboom->x, bboom->y, bboom->z))
