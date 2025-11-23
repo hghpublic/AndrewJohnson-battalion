@@ -4753,12 +4753,14 @@ void doDrawing (int eyeball)
     /********************/
 
     if (treelist->next != NULL)
+    {
 	if (view == MAPVIEW)
 	    drawtrees(allTreesEverywhere, numTreesEverywhere, mainCounter,
 				lod, itsChristmas, view);
 	else
 	    drawtrees(allTreesOnPlane, numTreesOnPlane, mainCounter,
 				lod, itsChristmas, view);
+    }
 
 
 
@@ -4888,11 +4890,13 @@ textLineWidth = 1.01;
 	if (mode == DEMOMODE)
 	    {
 	    if (!(Googelon.timeDead > 100) && !showOptions)
+        {
 		if (Googelon.moveCount < 150)
 		    showScores(itsChristmas, G, V, T, F, Googelon, mainCounter, offsetX, lod);
 		else
 		    showText2((long) (viewR-viewL), getSoundOn(), noSound, getMusicOn(),
 			    mode3D, no3D, lod, paused, itsChristmas, pointerGrab);
+        }
     
 	    
 	    showText3(lod);
