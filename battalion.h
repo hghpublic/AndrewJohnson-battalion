@@ -135,7 +135,8 @@
 #endif
 
 
-#define MONSTERFOGSTART		2.5
+// #define MONSTERFOGSTART		2.5
+#define MONSTERFOGSTART		2
 #define MONSTERFOGEND		6
 
 #define ARMYFOGSTART		4
