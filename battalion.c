@@ -2333,7 +2333,7 @@ void setPlayConditions()
     int type, shape;
     int buildingNumber;
 
-    struct tree unitHill;
+    struct tree unitHill = {0};
 
 	[[maybe_unused]] int unused_result;
 

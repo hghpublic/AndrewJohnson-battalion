@@ -128,9 +128,25 @@
 
 #else
 
-#define amalloc(x,y)	malloc(x)
+// #define amalloc(x,y)	malloc(x)
+static inline void* amalloc_f(size_t size) {
+    void* ptr = malloc(size);
+    if (ptr) {
+        memset(ptr, 0, size);
+    }
+    return ptr;
+}
+#define amalloc(x,y)	amalloc_f(x)
 #define afree(x,y)	free(x)
-#define acalloc(n,x,y)	calloc(n,x)
+// #define acalloc(n,x,y)	calloc(n,x)
+static inline void* acalloc_f(size_t nmemb, size_t size) {
+    void* ptr = calloc(nmemb, size);
+    if (ptr) {
+        memset(ptr, 0, nmemb * size);
+    }
+    return ptr;
+}
+#define acalloc(n,x,y)	acalloc_f(n,x)
 
 #endif
 
