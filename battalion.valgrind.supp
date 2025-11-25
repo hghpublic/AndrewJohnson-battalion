@@ -1,0 +1,47 @@
+{
+   <libgallium-Leak>
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/aarch64-linux-gnu/libgallium-*.so
+}
+{
+   <libgallium-Cond>
+   Memcheck:Cond
+   ...
+   obj:/usr/lib/aarch64-linux-gnu/libgallium-*.so
+}
+{
+   <libgallium-Value8>
+   Memcheck:Value8
+   obj:/usr/lib/aarch64-linux-gnu/libgallium-*.so
+}
+{
+   <libGLX_mesa-Leak>
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/aarch64-linux-gnu/libGLX_mesa.so.*
+}
+{
+   <libLLVM-Cond>
+   Memcheck:Cond
+   ...
+   obj:/usr/lib/aarch64-linux-gnu/libLLVM.so.*    
+}
+{
+   <libLLVM-Leak>
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/aarch64-linux-gnu/libLLVM.so.*    
+}
+{
+   <dl_-Leak>
+   Memcheck:Leak
+   ...
+   fun:*dl_*
+}
+{
+   <tk-Leak>
+   Memcheck:Leak
+   ...
+   fun:tk*
+}
