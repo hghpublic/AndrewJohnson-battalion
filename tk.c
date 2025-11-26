@@ -435,12 +435,24 @@ void tkExec(void)
 
 void tkGetMouseLoc(int *x, int *y)
     {
-    int junk;
 
-    *x = 0;
-    *y = 0;
-    XQueryPointer(display, window, (Window *)&junk, (Window *)&junk,
-		  &junk, &junk, x, y, (unsigned int *)&junk);
+    Window root_return = 0, child_return = 0;
+    int root_x_return = 0, root_y_return = 0;
+    int win_x_return = 0, win_y_return = 0;
+    unsigned int mask_return = 0;
+
+    Bool result = 0;
+
+    if (display == NULL)
+        return;
+
+    result = XQueryPointer(display, window, &root_return, &child_return, &root_x_return, &root_y_return, 
+                     &win_x_return, &win_y_return, &mask_return);
+
+
+    *x = win_x_return;
+    *y = win_y_return;
+
     }
 
 /******************************************************************************/
