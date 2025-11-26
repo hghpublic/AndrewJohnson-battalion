@@ -9,7 +9,7 @@ movies, you know what to do."
 )
 
 # if using valgrind, set BUILD_WITH_ASAN to OFF
-option(BUILD_WITH_ASAN "Build with ASAN" OFF)
+option(BUILD_WITH_ASAN "Build with ASAN" ON)
 
 find_package(X11 REQUIRED)
 find_package(OpenGL REQUIRED)
